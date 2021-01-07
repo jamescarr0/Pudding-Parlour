@@ -1,7 +1,7 @@
 ﻿Public Class PuddingParlourForm
 
     'sale variable for holding sale data.'
-    Dim sale
+    Dim sale As Sale
 
     'Tracking the total cost of order'
     Dim TotalCost As Decimal
