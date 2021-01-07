@@ -151,7 +151,7 @@
             TotalCost += CDec(row.Cells("Qty").Value * row.Cells("Price").Value)
         Next
 
-        'Convery to current ("c") and update the total cost label'
+        'Convert value to currency ("c") and update total cost label'
         TotalCostLabel.Text = Decimal.Parse(TotalCost).ToString("c")
     End Sub
 
