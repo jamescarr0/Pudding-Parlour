@@ -306,19 +306,33 @@
     Private Sub CellQuantityValue_Changed _
         (sender As Object, e As DataGridViewCellEventArgs) _
         Handles OrderSummary.CellEndEdit
+
         'Update order total if user edits the quantity of an item and user input 
         'passes Integer validation check' 
+
         'Create validator'
         Dim QtyValidator As Integer
 
-        If Integer.TryParse(OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value, QtyValidator) And
-            OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value >= 0 Then
-            'Validation check passed, input is positive Integer, update order total'
-            UpdateTotal()
-        Else
-            'Validation check failed, input is NOT of type Integer, undo and insert old value'
-            OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = QtyUndo
+        'Get user input from quantity cell'
+        Dim QtyInput As String = OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+
+        If Integer.TryParse(QtyInput, QtyValidator) Then
+
+            'Integer value entered, check for positive value, zero and above'
+            If QtyInput >= 0 Then
+
+                'Zero and above Integer value entered, update total'
+                UpdateTotal()
+
+                'Cell input validation complete, Exit sub routine'
+                Exit Sub
+            End If
+
         End If
+
+        'Validation checks failed: User input not valid'
+        'Set quantity cell value to previous valid value'
+        OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = QtyUndo
     End Sub
 
     Private Sub OrderItem_RowDeleted(sender As Object, e As System.Windows.Forms.DataGridViewRowEventArgs) Handles OrderSummary.UserDeletedRow
