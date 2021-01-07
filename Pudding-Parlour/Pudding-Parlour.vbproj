@@ -124,5 +124,8 @@
   <ItemGroup>
     <None Include="Resources\pp_img.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\GUI-PP-screenshot.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
