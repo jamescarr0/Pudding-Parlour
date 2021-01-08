@@ -1,38 +1,35 @@
 ﻿Public Class PuddingParlourForm
 
-    'sale variable for holding sale data.'
-    Dim sale As Sale
-
     'Tracking the total cost of order'
     Dim TotalCost As Decimal
 
     'Declare Navigation active & default button colours.
-    Dim NavBtnActive = Color.Pink
-    Dim NavBtnDefault = SystemColors.Control
+    ReadOnly NavBtnActive = Color.Pink
+    ReadOnly NavBtnDefault = SystemColors.Control
 
     'Create menu items'
     'Puddings'
-    Dim ApplePie As New MenuItem("Apple Pie", "3.49")
-    Dim ChocSponge As New MenuItem("Chocolate Sponge", "3.99")
-    Dim StrawCheeseCake As New MenuItem("Strawberry Cheese Cake", "3.99")
-    Dim Trifle As New MenuItem("Trifle", "2.99")
-    Dim IceCream As New MenuItem("Ice Cream", "2.99")
-    Dim BakewellTart As New MenuItem("Bakewell Tart", "3.89")
-    Dim BanoffeePie As New MenuItem("Banoffee Pie", "4.25")
-    Dim Cookies As New MenuItem("Cookies", "1.99")
-    Dim Brownies As New MenuItem("Brownies", "1.99")
-    Dim Jelly As New MenuItem("Jelly", "2.49")
+    ReadOnly ApplePie As New MenuItem("Apple Pie", 3.49)
+    ReadOnly ChocSponge As New MenuItem("Chocolate Sponge", 3.99)
+    ReadOnly StrawCheeseCake As New MenuItem("Strawberry Cheese Cake", 3.99)
+    ReadOnly Trifle As New MenuItem("Trifle", 2.99)
+    ReadOnly IceCream As New MenuItem("Ice Cream", 2.99)
+    ReadOnly BakewellTart As New MenuItem("Bakewell Tart", 3.89)
+    ReadOnly BanoffeePie As New MenuItem("Banoffee Pie", 4.25)
+    ReadOnly Cookies As New MenuItem("Cookies", 1.99)
+    ReadOnly Brownies As New MenuItem("Brownies", 1.99)
+    ReadOnly Jelly As New MenuItem("Jelly", 2.49)
 
     'Drinks'
-    Dim Tea As New MenuItem("Tea", "0.99")
-    Dim Coffee As New MenuItem("Coffee", "0.99")
-    Dim HotChocolate As New MenuItem("Hot Chocolate", "2.29")
-    Dim Coke As New MenuItem("Coca Cola", "1.99")
-    Dim Lemonade As New MenuItem("Lemonade", "1.99")
-    Dim Water As New MenuItem("Water", "1.00")
-    Dim IronBru As New MenuItem("Iron Bru", "1.99")
-    Dim Sprite As New MenuItem("Sprite", "1.99")
-    Dim Orange As New MenuItem("Orange", "1.49")
+    ReadOnly Tea As New MenuItem("Tea", 0.99)
+    ReadOnly Coffee As New MenuItem("Coffee", 0.99)
+    ReadOnly HotChocolate As New MenuItem("Hot Chocolate", 2.29)
+    ReadOnly Coke As New MenuItem("Coca Cola", 1.99)
+    ReadOnly Lemonade As New MenuItem("Lemonade", 1.99)
+    ReadOnly Water As New MenuItem("Water", 1.0)
+    ReadOnly IronBru As New MenuItem("Iron Bru", 1.99)
+    ReadOnly Sprite As New MenuItem("Sprite", 1.99)
+    ReadOnly Orange As New MenuItem("Orange", 1.49)
 
     'Holds the previous value of order quantity that can be reverted back to
     'if user enters invalid data'
@@ -96,18 +93,20 @@
         'Sub routine for managing items added to the order summary'
         'If item already exists in order then increment quantity'
         'Else add new list item'
+
         For Each row In OrderSummary.Rows
-            If row.Cells(0).Value.Equals(item.name) Then
-                row.Cells(1).Value += 1
+            'Check item cell for existing item added to order'
+            If row.Cells("Item").Value.Equals(item.name) Then
+                'If item exists increment qty, update total and exit sub routine'
+                row.Cells("Qty").Value += 1
                 UpdateTotal()
                 Exit Sub
             End If
         Next
 
-        'Add new item to order summary grid'
+        'Item does not exist.  Add new item to order summary and
+        'update total'
         OrderSummary.Rows.Add(item.name, item.qty, item.price)
-
-        'Update the total price'
         UpdateTotal()
     End Sub
 
@@ -386,30 +385,30 @@
             End If
         Next
 
-        sale = New Sale(itemAndQty, TotalCost, orderType)
+        Dim sale As New Sale(itemAndQty, TotalCost, orderType)
 
         'Hide all panels, prepare for receipt'
         HideAllPanels()
 
         'Create the order receipt'
-        CreateReceipt()
+        CreateReceipt(sale)
 
         'Show confirmation panel'
         ConfirmationPanel.Show()
     End Sub
 
-    Private Sub CreateReceipt()
+    Private Sub CreateReceipt(order)
         'Create receipt from sales data and update the receipt text label'
         Dim Receipt As String = ""
 
-        For Each pair As KeyValuePair(Of String, Integer) In sale.items
+        For Each pair As KeyValuePair(Of String, Integer) In order.items
             'Get item and quantity data from key value pairs and add to receipt string.'
             Receipt += ($"{pair.Value} x {pair.Key} {Environment.NewLine}")
         Next
 
         'Add order type and total order price to receipt'
-        Receipt += Environment.NewLine + sale.orderType + Environment.NewLine
-        Receipt += $"£{sale.orderTotal}"
+        Receipt += Environment.NewLine + order.orderType + Environment.NewLine
+        Receipt += $"£{order.orderTotal}"
 
         'Update receipt label with order details'
         ReceiptTextBox.Text = Receipt
