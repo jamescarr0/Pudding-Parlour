@@ -111,21 +111,13 @@
     End Sub
 
     Private Sub RemoveZeroQty()
-        'Sub routine for deleting rows with zero quantities'
-        'Holds the list on indexes of order items to deleted from grid'
-        Dim deleteItemIndex = New List(Of String)
+        'Sub routine for deleting row with zero quantity'
 
         For Each row In OrderSummary.Rows
-            'Iterate through order summary and add the index of row with a zero '0' quantity'
+            'Iterate through order summary and remove item with a quantity of zero'
             If row.Cells("Qty").Value = "0" Then
-                'Append cell index that containing zero value'
-                deleteItemIndex.Add(row.Index)
+                OrderSummary.Rows.RemoveAt(row.Index)
             End If
-        Next
-
-        For Each index In deleteItemIndex
-            'For each order item with a quantity value of zero remove from grid'
-            OrderSummary.Rows.RemoveAt(index)
         Next
 
     End Sub
