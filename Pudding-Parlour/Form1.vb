@@ -91,8 +91,7 @@
 
     Private Sub AddToCart(item)
         'Sub routine for managing items added to the order summary'
-        'If item already exists in order then increment quantity'
-        'Else add new list item'
+        'If item already exists in order increment quantity'
 
         For Each row In OrderSummary.Rows
             'Check item cell for existing item added to order'
@@ -290,8 +289,10 @@
     Private Sub CellQuantityValue_Changing _
         (sender As Object, e As DataGridViewCellCancelEventArgs) _
         Handles OrderSummary.CellBeginEdit
-        'Update order total if user edits the quantity of an item' 
-        Me.QtyUndo = OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value.ToString
+        'Store the current valid value of the quantity cell about to be changed'
+        'If user enters incorrect data and fails validation, program will revert'
+        'back to this value'
+        QtyUndo = OrderSummary.Rows(e.RowIndex).Cells(e.ColumnIndex).Value.ToString
     End Sub
 
     Private Sub CellQuantityValue_Changed _
