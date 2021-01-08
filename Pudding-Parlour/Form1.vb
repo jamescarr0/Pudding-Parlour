@@ -360,7 +360,7 @@
     End Sub
 
     Private Sub CreateOrder()
-        'Sub ruotine to create Sale object for storing sale data'
+        'Sub routine to create Sale object and sale receipt'
 
         'Create key value pair for item and quantity ordered. (key: Item, Value: Qty)'
         Dim itemAndQty As New List(Of KeyValuePair(Of String, Integer))
